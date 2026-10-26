@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Code Analysis &amp; Optimizer</title>
+
+  <!-- Tailwind CSS (utility classes) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js (sparklines + donut chart) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <!-- Prism.js for syntax highlighting in code editor -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Our custom CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Font Awesome Free — used for every icon glyph in this app (nav, stat tiles, buttons, forms) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            bg: '#07060f',
+            panel: '#0d0c1a',
+            card: '#121123',
+            cardhi: '#161528',
+            border: '#211f38',
+            purple: {
+              DEFAULT: '#6d5cf5',
+              dark: '#4f3ff0',
+              light: '#a78bfa',
+            },
+          },
+          boxShadow: {
+            glow: '0 0 40px -8px rgba(109,92,245,0.45)',
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-radial text-gray-200 min-h-screen">
+
+  <!-- ===================== LOGIN PAGE ===================== -->
+  <div id="login-page" class="switch-page min-h-screen w-full flex items-center">
+    <div class="max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 px-6 py-10 items-center">
+
+      <!-- Left marketing panel -->
+      <div class="hidden lg:block fade-in">
+        <div class="flex items-center gap-3 mb-10">
+          <div class="w-11 h-11 rounded-xl grad-btn flex items-center justify-center text-white">
+            <i class="fa-brands fa-codepen text-xl"></i>
+          </div>
+          <div>
+            <div class="text-white font-bold text-lg leading-tight">AI Code</div>
+            <div class="text-purple-light font-semibold text-sm leading-tight">Analysis &amp; Optimizer</div>
+          </div>
+        </div>
+
+        <h1 class="text-4xl xl:text-5xl font-extrabold leading-tight mb-6">
+          <span class="text-purple-light">Smarter</span> <span class="text-white">Code.</span><br />
+          <span class="text-purple-light">Better</span> <span class="text-white">Performance.</span><br />
+          <span class="text-purple-light">Secure</span> <span class="text-white">Applications.</span>
+        </h1>
+
+        <p class="text-gray-400 max-w-md mb-10 leading-relaxed">
+          AI-powered analysis to detect issues, improve code quality, and optimize performance. Write better code, faster.
+        </p>
+
+        <div class="space-y-5 max-w-md">
+          <div class="flex gap-4 items-start">
+            <div class="w-11 h-11 shrink-0 rounded-lg bg-card border border-border flex items-center justify-center text-purple-light">
+              <i class="fa-solid fa-magnifying-glass-chart text-lg"></i>
+            </div>
+            <div>
+              <div class="text-white font-semibold text-sm">Deep Code Analysis</div>
+              <div class="text-gray-500 text-sm">Detect bugs, security vulnerabilities, and performance issues.</div>
+            </div>
+          </div>
+          <div class="flex gap-4 items-start">
+            <div class="w-11 h-11 shrink-0 rounded-lg bg-card border border-border flex items-center justify-center text-purple-light">
+              <i class="fa-solid fa-bolt text-lg"></i>
+            </div>
+            <div>
+              <div class="text-white font-semibold text-sm">Performance Optimization</div>
+              <div class="text-gray-500 text-sm">Get smart suggestions to optimize and refactor your code.</div>
+            </div>
+          </div>
+          <div class="flex gap-4 items-start">
+            <div class="w-11 h-11 shrink-0 rounded-lg bg-card border border-border flex items-center justify-center text-purple-light">
+              <i class="fa-solid fa-lock text-lg"></i>
+            </div>
+            <div>
+              <div class="text-white font-semibold text-sm">Secure &amp; Reliable</div>
+              <div class="text-gray-500 text-sm">Ensure your code follows best practices and industry standards.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right login card -->
+      <div class="fade-in">
+        <div class="bg-panel border border-border rounded-2xl shadow-glow p-8 sm:p-10 max-w-md mx-auto w-full">
+          <h2 id="auth-title" class="text-2xl font-bold text-white text-center mb-1">Welcome Back!</h2>
+          <p id="auth-subtitle" class="text-gray-500 text-sm text-center mb-6">
+            Login to continue to <span class="text-purple-light">AI Code Analysis &amp; Optimizer</span>
+          </p>
+
+          <!-- error / success message banner -->
+          <div id="auth-message" class="hidden text-sm rounded-lg px-4 py-2.5 mb-4"></div>
+
+          <!-- ============ LOGIN FORM ============ -->
+          <form id="login-form" class="space-y-5">
+            <div>
+              <label class="text-sm text-gray-300 mb-1.5 block">Email Address</label>
+              <div class="input-shell rounded-lg px-4 py-3 flex items-center gap-3">
+                <i class="fa-regular fa-envelope text-gray-500 shrink-0"></i>
+                <input id="login-email" type="email" required placeholder="Enter your email" />
+              </div>
+            </div>
+
+            <div>
+              <label class="text-sm text-gray-300 mb-1.5 block">Password</label>
+              <div class="input-shell rounded-lg px-4 py-3 flex items-center gap-3">
+                <i class="fa-solid fa-lock text-gray-500 shrink-0"></i>
+                <input id="password" type="password" required placeholder="Enter your password" />
+                <button type="button" id="toggle-pw" class="text-gray-500 hover:text-gray-300 shrink-0">
+                  <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" stroke="currentColor" stroke-width="1.6" />
+                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-sm">
+              <label class="flex items-center gap-2 text-gray-400 cursor-pointer select-none">
+                <input type="checkbox" checked class="accent-purple w-4 h-4 rounded" />
+                Remember me
+              </label>
+              <a href="#" class="text-purple-light hover:text-purple font-medium">Forgot Password?</a>
+            </div>
+
+            <button id="login-submit-btn" type="submit" class="grad-btn w-full rounded-lg py-3 text-white font-semibold flex items-center justify-center gap-2">
+              <i class="fa-solid fa-right-to-bracket"></i>
+              Login
+            </button>
+
+            <div class="flex items-center gap-3 py-1">
+              <div class="divider-line"></div>
+              <span class="text-xs text-gray-500">or continue with</span>
+              <div class="divider-line"></div>
+            </div>
+
+            <button type="button" class="w-full rounded-lg py-3 border border-border bg-card hover:bg-cardhi text-gray-200 font-medium flex items-center justify-center gap-2 transition">
+              <svg width="18" height="18" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M23.52 12.27c0-.82-.07-1.6-.2-2.36H12v4.47h6.47a5.53 5.53 0 01-2.4 3.63v3h3.88c2.27-2.09 3.57-5.17 3.57-8.74z" />
+                <path fill="#34A853" d="M12 24c3.24 0 5.96-1.07 7.95-2.9l-3.88-3c-1.08.72-2.46 1.15-4.07 1.15-3.13 0-5.78-2.11-6.73-4.95H1.26v3.11A12 12 0 0012 24z" />
+                <path fill="#FBBC05" d="M5.27 14.3A7.2 7.2 0 014.9 12c0-.8.14-1.57.37-2.3V6.59H1.26A12 12 0 000 12c0 1.93.46 3.76 1.26 5.41l4.01-3.11z" />
+                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.44-3.44C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.69 1.26 6.59l4.01 3.11C6.22 6.86 8.87 4.75 12 4.75z" />
+              </svg>
+              Continue with Google
+            </button>
+            <button type="button" class="w-full rounded-lg py-3 border border-border bg-card hover:bg-cardhi text-gray-200 font-medium flex items-center justify-center gap-2 transition">
+              <i class="fa-brands fa-github text-lg"></i>
+              Continue with GitHub
+            </button>
+
+            <p class="text-center text-sm text-gray-500 pt-1">
+              Don't have an account? <a href="#" id="show-signup" class="text-purple-light font-semibold hover:text-purple">Create New Account</a>
+            </p>
+          </form>
+
+          <!-- ============ SIGNUP FORM (hidden by default) ============ -->
+          <form id="signup-form" class="space-y-5 hidden">
+            <div>
+              <label class="text-sm text-gray-300 mb-1.5 block">Full Name</label>
+              <div class="input-shell rounded-lg px-4 py-3 flex items-center gap-3">
+                <i class="fa-regular fa-user text-gray-500 shrink-0"></i>
+                <input id="signup-name" type="text" required placeholder="Enter your full name" />
+              </div>
+            </div>
+
+            <div>
+              <label class="text-sm text-gray-300 mb-1.5 block">Email Address</label>
+              <div class="input-shell rounded-lg px-4 py-3 flex items-center gap-3">
+                <i class="fa-regular fa-envelope text-gray-500 shrink-0"></i>
+                <input id="signup-email" type="email" required placeholder="Enter your email" />
+              </div>
+            </div>
+
+            <div>
+              <label class="text-sm text-gray-300 mb-1.5 block">Password</label>
+              <div class="input-shell rounded-lg px-4 py-3 flex items-center gap-3">
+                <i class="fa-solid fa-lock text-gray-500 shrink-0"></i>
+                <input id="signup-password" type="password" required minlength="6" placeholder="At least 6 characters" />
+              </div>
+            </div>
+
+            <div>
+              <label class="text-sm text-gray-300 mb-1.5 block">Confirm Password</label>
+              <div class="input-shell rounded-lg px-4 py-3 flex items-center gap-3">
+                <i class="fa-solid fa-lock text-gray-500 shrink-0"></i>
+                <input id="signup-confirm" type="password" required minlength="6" placeholder="Re-enter your password" />
+              </div>
+            </div>
+
+            <button id="signup-submit-btn" type="submit" class="grad-btn w-full rounded-lg py-3 text-white font-semibold flex items-center justify-center gap-2">
+              <i class="fa-solid fa-user-plus"></i>
+              Create Account
+            </button>
+
+            <p class="text-center text-sm text-gray-500 pt-1">
+              Already have an account? <a href="#" id="show-login" class="text-purple-light font-semibold hover:text-purple">Login</a>
+            </p>
+          </form>
+        </div>
+
+        <div class="flex items-center justify-center gap-2 mt-6 text-xs text-gray-500">
+          <i class="fa-solid fa-user-shield text-sm"></i>
+          Your data is secure with us. We never share your information.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== DASHBOARD PAGE ===================== -->
+  <div id="dashboard-page" class="switch-page hidden min-h-screen w-full">
+    <div class="flex">
+
+      <!-- Sidebar -->
+      <aside class="w-64 shrink-0 min-h-screen bg-panel border-r border-border p-5 hidden md:flex md:flex-col">
+        <div class="flex items-center gap-3 mb-8 px-1">
+          <div class="w-10 h-10 rounded-xl grad-btn flex items-center justify-center text-white">
+            <i class="fa-brands fa-codepen text-lg"></i>
+          </div>
+          <div>
+            <div class="text-white font-bold text-sm leading-tight">AI Code</div>
+            <div class="text-purple-light font-semibold text-xs leading-tight">Analysis &amp; Optimizer</div>
+          </div>
+        </div>
+
+        <nav class="space-y-1 text-sm font-medium flex-1">
+          <a href="#" data-nav data-page="dashboard" class="nav-item active flex items-center gap-3 px-3 py-2.5 rounded-lg">
+            <i class="fa-solid fa-table-cells"></i>
+            Dashboard
+          </a>
+          <a href="#" data-nav data-page="new-analysis" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            New Analysis
+          </a>
+          <a href="#" data-nav data-page="analysis-history" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            Analysis History
+          </a>
+          <a href="#" data-nav data-page="reports" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg">
+            <i class="fa-solid fa-chart-column"></i>
+            Reports
+          </a>
+          <a href="#" data-nav data-page="compare-code" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg">
+            <i class="fa-solid fa-code-compare"></i>
+            Compare Code
+          </a>
+          <a href="#" data-nav class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg">
+            <i class="fa-solid fa-download"></i>
+            Downloads
+          </a>
+          <a href="#" data-nav class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg">
+            <i class="fa-solid fa-gear"></i>
+            Settings
+          </a>
+          <a href="#" data-nav data-page="help-support" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg">
+            <i class="fa-regular fa-circle-question"></i>
+            Help &amp; Support
+          </a>
+        </nav>
+
+        <div class="rounded-xl p-4 mt-4" style="background: linear-gradient(160deg, #1c1836, #141227); border: 1px solid #2a2650;">
+          <div class="flex items-center gap-2 text-amber-400 text-sm font-semibold mb-1">
+            <i class="fa-solid fa-crown"></i>
+            Upgrade to Pro
+          </div>
+          <p class="text-xs text-gray-400 mb-3 leading-relaxed">Unlock advanced analysis, prioritized scans and more powerful features.</p>
+          <button class="grad-btn w-full rounded-lg py-2 text-sm font-semibold text-white flex items-center justify-center gap-1.5">
+            Upgrade Now <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-3 mt-5 pt-4 border-t border-border">
+          <div id="sidebar-avatar" class="w-9 h-9 rounded-full grad-btn flex items-center justify-center text-white text-xs font-bold">SG</div>
+          <div class="leading-tight">
+            <div id="sidebar-username" class="text-sm font-semibold text-white">Shivam Gupta</div>
+            <div class="text-xs text-gray-500">Developer</div>
+          </div>
+        </div>
+        <button id="logout-btn" class="mt-3 w-full text-left text-xs text-gray-500 hover:text-red-400 flex items-center gap-2 px-1">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          Log out
+        </button>
+      </aside>
+
+      <!-- Main content -->
+      <main class="flex-1 p-6 lg:p-8 fade-in">
+
+        <!-- ============ DASHBOARD PAGE CONTENT ============ -->
+        <div id="page-dashboard">
+
+          <!-- Topbar -->
+          <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+            <div>
+              <h1 id="welcome-heading" class="text-2xl font-bold text-white">Welcome back, Shivam! 👋</h1>
+              <p class="text-gray-500 text-sm mt-1">Here's an overview of your code analysis activity.</p>
+            </div>
+            <div class="flex items-center gap-4">
+              <button id="topbar-new-analysis-btn" class="grad-btn rounded-lg px-5 py-3 text-sm font-semibold text-white flex items-center gap-2 shadow-lg shadow-purple-500/20">
+                <i class="fa-solid fa-plus"></i>
+                New Analysis
+              </button>
+            </div>
+          </div>
+
+          <!-- Stat cards -->
+          <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5 mb-8">
+
+            <div class="stat-card-premium rounded-xl p-5">
+              <div class="flex items-center justify-between mb-4">
+                <div class="icon-glow icon-glow-emerald w-12 h-12 rounded-xl flex items-center justify-center">
+                  <i class="fa-solid fa-shield-halved"></i>
+                </div>
+              </div>
+              <div class="text-sm text-gray-400 mb-2 font-medium">Code Quality Score</div>
+              <div class="flex items-end justify-between mb-2">
+                <div class="text-3xl font-extrabold text-white leading-none"><span id="dash-quality-score">–</span><span class="text-base text-gray-500 font-semibold">/100</span></div>
+                <canvas class="spark" data-color="#22c55e" data-values="6,8,7,9,8,10,9" width="70" height="28"></canvas>
+              </div>
+              <div id="dash-quality-label" class="text-sm flex items-center gap-1.5 font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>–</div>
+            </div>
+
+            <div class="stat-card-premium rounded-xl p-5">
+              <div class="flex items-center justify-between mb-4">
+                <div class="icon-glow icon-glow-red w-12 h-12 rounded-xl flex items-center justify-center">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+              </div>
+              <div class="text-sm text-gray-400 mb-2 font-medium">Security Risk</div>
+              <div class="flex items-end justify-between mb-2">
+                <div class="text-3xl font-extrabold text-white leading-none"><span id="dash-security-risk">–</span><span class="text-base text-gray-500 font-semibold">%</span></div>
+                <canvas class="spark" data-color="#ef4444" data-values="4,9,5,10,6,8,7" width="70" height="28"></canvas>
+              </div>
+              <div id="dash-security-label" class="text-sm flex items-center gap-1.5 font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>–</div>
+            </div>
+
+            <div class="stat-card-premium rounded-xl p-5">
+              <div class="flex items-center justify-between mb-4">
+                <div class="icon-glow icon-glow-purple w-12 h-12 rounded-xl flex items-center justify-center">
+                  <i class="fa-solid fa-bug"></i>
+                </div>
+              </div>
+              <div class="text-sm text-gray-400 mb-2 font-medium">Bugs Found</div>
+              <div class="flex items-end justify-between mb-2">
+                <div class="text-3xl font-extrabold text-white leading-none" id="dash-bugs-found">–</div>
+                <canvas class="spark" data-color="#a78bfa" data-values="5,7,6,9,7,11,8" width="70" height="28"></canvas>
+              </div>
+              <div class="text-sm text-purple-light flex items-center gap-1.5 font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-purple-light"></span>Total Issues</div>
+            </div>
+
+            <div class="stat-card-premium rounded-xl p-5">
+              <div class="flex items-center justify-between mb-4">
+                <div class="icon-glow icon-glow-sky w-12 h-12 rounded-xl flex items-center justify-center">
+                  <i class="fa-solid fa-gauge-high"></i>
+                </div>
+              </div>
+              <div class="text-sm text-gray-400 mb-2 font-medium">Performance Issues</div>
+              <div class="flex items-end justify-between mb-2">
+                <div class="text-3xl font-extrabold text-white leading-none" id="dash-performance-issues">–</div>
+                <canvas class="spark" data-color="#38bdf8" data-values="7,6,8,7,9,7,8" width="70" height="28"></canvas>
+              </div>
+              <div class="text-sm text-sky-400 flex items-center gap-1.5 font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>Needs Improvement</div>
+            </div>
+
+            <div class="stat-card-premium rounded-xl p-5">
+              <div class="flex items-center justify-between mb-4">
+                <div class="icon-glow icon-glow-amber w-12 h-12 rounded-xl flex items-center justify-center">
+                  <i class="fa-solid fa-folder-open"></i>
+                </div>
+              </div>
+              <div class="text-sm text-gray-400 mb-2 font-medium">Files Analyzed</div>
+              <div class="flex items-end justify-between mb-2">
+                <div class="text-3xl font-extrabold text-white leading-none" id="dash-files-analyzed">–</div>
+                <canvas class="spark" data-color="#f59e0b" data-values="3,5,4,6,5,7,6" width="70" height="28"></canvas>
+              </div>
+              <div class="text-sm text-amber-400 flex items-center gap-1.5 font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>Total Files</div>
+            </div>
+          </div>
+
+          <!-- Code comparison + Issue summary -->
+          <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+
+            <div class="xl:col-span-2 stat-card-premium rounded-xl p-6">
+              <div class="flex items-center justify-between mb-5">
+                <div id="dashboard-code-comparison-link" class="flex items-center gap-2.5 text-white font-bold text-lg cursor-pointer hover:text-purple-light transition">
+                  <i class="fa-solid fa-code-compare text-purple-light"></i>
+                  Code Comparison
+                </div>
+                <span class="inline-flex items-center gap-2 bg-card border border-border/80 text-sm font-semibold text-gray-200 rounded-lg px-3.5 py-2 capitalize shadow-sm">
+                  <span id="dash-compare-lang-icon" class="w-4 h-4 flex items-center justify-center shrink-0"></span>
+                  <span id="dash-compare-lang-text">–</span>
+                </span>
+              </div>
+
+              <div id="dash-compare-empty" class="hidden text-center text-gray-500 text-sm py-12">
+                <i class="fa-regular fa-face-meh text-3xl block mx-auto mb-2 text-gray-600"></i>
+                No AI-fixed analysis yet. Run one from "New Analysis" with AI Fix enabled to see a comparison here.
+              </div>
+
+              <div id="dash-compare-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="code-panel rounded-lg overflow-hidden">
+                    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-border text-red-400 text-sm font-bold">
+                      <span class="w-2.5 h-2.5 rounded-full bg-red-400"></span> Original Code
+                    </div>
+                    <pre id="dash-original-code" class="p-4 text-xs leading-6 overflow-x-auto max-h-[260px] overflow-y-auto whitespace-pre-wrap"></pre>
+                  </div>
+                  <div class="code-panel rounded-lg overflow-hidden">
+                    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-border text-emerald-400 text-sm font-bold">
+                      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Optimized Code
+                    </div>
+                    <pre id="dash-optimized-code" class="p-4 text-xs leading-6 overflow-x-auto max-h-[260px] overflow-y-auto whitespace-pre-wrap"></pre>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-border">
+                  <div class="bg-card rounded-xl p-4 border border-border/60">
+                    <div class="text-xs text-gray-500 mb-2 font-medium uppercase tracking-wide">File</div>
+                    <div id="dash-compare-file" class="text-gray-100 font-bold text-lg truncate">–</div>
+                  </div>
+                  <div class="bg-card rounded-xl p-4 border border-border/60">
+                    <div class="text-xs text-gray-500 mb-2 font-medium uppercase tracking-wide">Quality Score</div>
+                    <div id="dash-compare-score" class="text-emerald-400 font-extrabold text-lg">–</div>
+                  </div>
+                  <div class="bg-card rounded-xl p-4 border border-border/60">
+                    <div class="text-xs text-gray-500 mb-2 font-medium uppercase tracking-wide">Total Issues</div>
+                    <div id="dash-compare-issues" class="text-sky-400 font-extrabold text-lg">–</div>
+                  </div>
+                  <div class="bg-card rounded-xl p-4 border border-border/60">
+                    <div class="text-xs text-gray-500 mb-2 font-medium uppercase tracking-wide">Analyzed</div>
+                    <div id="dash-compare-date" class="text-gray-200 font-semibold text-sm">–</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Issue summary -->
+            <div class="stat-card-premium rounded-xl p-6">
+              <div class="flex items-center justify-between mb-5">
+                <div>
+                  <div class="text-white font-semibold">Issue Summary</div>
+                  <div class="text-[11px] text-gray-500 mt-0.5">From your most recent analysis</div>
+                </div>
+                <a href="#" id="issue-summary-view-all" class="text-xs text-purple-light font-medium flex items-center gap-1 hover:text-purple transition">
+                  View All
+                  <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+              </div>
+
+              <!-- Donut + severity legend side by side -->
+              <div class="flex items-center gap-5 mb-5">
+                <div class="relative w-28 h-28 shrink-0">
+                  <canvas id="issueDonut"></canvas>
+                  <div class="absolute inset-0 flex flex-col items-center justify-center">
+                    <div id="dash-issue-total" class="text-xl font-bold text-white">0</div>
+                    <div class="text-[10px] text-gray-500">Issues</div>
+                  </div>
+                </div>
+
+                <div class="flex-1 space-y-2.5">
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="flex items-center gap-2 text-gray-300"><span class="w-2 h-2 rounded-full" style="background:#ff5c7a"></span>Critical</span>
+                    <span id="dash-sev-critical" class="text-white font-semibold">0</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="flex items-center gap-2 text-gray-300"><span class="w-2 h-2 rounded-full" style="background:#ff9d3d"></span>High</span>
+                    <span id="dash-sev-high" class="text-white font-semibold">0</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="flex items-center gap-2 text-gray-300"><span class="w-2 h-2 rounded-full" style="background:#ffe25c"></span>Medium</span>
+                    <span id="dash-sev-medium" class="text-white font-semibold">0</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="flex items-center gap-2 text-gray-300"><span class="w-2 h-2 rounded-full" style="background:#3fc7ff"></span>Low</span>
+                    <span id="dash-sev-low" class="text-white font-semibold">0</span>
+                  </div>
+                </div>
+              </div>
+
+              <div id="dash-severity-bar" class="w-full h-1.5 rounded-full overflow-hidden flex mb-6 bg-cardhi">
+                <div id="dash-sev-bar-critical" class="h-full bg-red-500" style="width:0%"></div>
+                <div id="dash-sev-bar-high" class="h-full bg-orange-400" style="width:0%"></div>
+                <div id="dash-sev-bar-medium" class="h-full bg-yellow-300" style="width:0%"></div>
+                <div id="dash-sev-bar-low" class="h-full bg-sky-400" style="width:0%"></div>
+              </div>
+
+              <!-- Category breakdown as mini progress bars -->
+              <div class="text-xs text-gray-500 font-medium mb-3 uppercase tracking-wide">
+                By Category
+              </div>
+
+              <div class="space-y-3">
+
+                <!-- Bugs -->
+                <div class="category-row">
+                  <div class="flex items-center justify-between text-sm mb-1.5">
+                    <span class="flex items-center gap-2 text-gray-300">
+                      <span class="w-5 h-5 rounded-md icon-chip icon-chip-bug flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-bug text-[11px]"></i>
+                      </span>
+                      Bugs
+                    </span>
+                    <span id="dash-cat-bug" class="text-white font-semibold">0</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-cardhi overflow-hidden">
+                    <div id="dash-cat-bar-bug" class="h-full bg-rose-400 rounded-full" style="width:0%"></div>
+                  </div>
+                </div>
+
+                <!-- Security -->
+                <div class="category-row">
+                  <div class="flex items-center justify-between text-sm mb-1.5">
+                    <span class="flex items-center gap-2 text-gray-300">
+                      <span class="w-5 h-5 rounded-md icon-chip icon-chip-security flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-lock text-[11px]"></i>
+                      </span>
+                      Security
+                    </span>
+                    <span id="dash-cat-security" class="text-white font-semibold">0</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-cardhi overflow-hidden">
+                    <div id="dash-cat-bar-security" class="h-full bg-red-400 rounded-full" style="width:0%"></div>
+                  </div>
+                </div>
+
+                <!-- Performance -->
+                <div class="category-row">
+                  <div class="flex items-center justify-between text-sm mb-1.5">
+                    <span class="flex items-center gap-2 text-gray-300">
+                      <span class="w-5 h-5 rounded-md icon-chip icon-chip-performance flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-bolt text-[11px]"></i>
+                      </span>
+                      Performance
+                    </span>
+                    <span id="dash-cat-performance" class="text-white font-semibold">0</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-cardhi overflow-hidden">
+                    <div id="dash-cat-bar-performance" class="h-full bg-sky-400 rounded-full" style="width:0%"></div>
+                  </div>
+                </div>
+
+                <!-- Style -->
+                <div class="category-row">
+                  <div class="flex items-center justify-between text-sm mb-1.5">
+                    <span class="flex items-center gap-2 text-gray-300">
+                      <span class="w-5 h-5 rounded-md icon-chip icon-chip-style flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-palette text-[11px]"></i>
+                      </span>
+                      Style
+                    </span>
+                    <span id="dash-cat-style" class="text-white font-semibold">0</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-cardhi overflow-hidden">
+                    <div id="dash-cat-bar-style" class="h-full bg-purple-light rounded-full" style="width:0%"></div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <!-- ^ closes Issue Summary card (stat-card-premium) -->
+          </div>
+          <!-- ^ closes "grid grid-cols-1 xl:grid-cols-3" (Code comparison + Issue summary) -->
+
+          <!-- Recent analysis table -->
+          <div class="stat-card-premium rounded-xl p-6">
+            <div class="flex items-center justify-between mb-5">
+              <div class="text-white font-bold text-lg">Recent Analysis</div>
+              <a href="#" id="recent-analysis-view-all" class="text-sm text-purple-light font-semibold flex items-center gap-1 hover:text-purple transition">
+                View All
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+              </a>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-left text-gray-400 border-b border-border">
+                    <th class="font-bold text-sm pb-4 pr-4">File Name</th>
+                    <th class="font-bold text-sm pb-4 pr-4">Language</th>
+                    <th class="font-bold text-sm pb-4 pr-4">Issues</th>
+                    <th class="font-bold text-sm pb-4 pr-4">Quality Score</th>
+                    <th class="font-bold text-sm pb-4 pr-4">Date</th>
+                    <th class="font-bold text-sm pb-4">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-analysis-body">
+                  <!-- rows injected by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+        <!-- ============ END DASHBOARD PAGE CONTENT ============ -->
+
+        <!-- ============ NEW ANALYSIS PAGE (hidden by default) ============ -->
+        <div id="page-new-analysis" class="hidden">
+
+          <!-- Header -->
+          <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-xl grad-btn flex items-center justify-center text-white">
+                <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
+              </div>
+              <div>
+                <h1 class="text-2xl font-bold text-white">New Analysis</h1>
+                <p class="text-gray-500 text-sm mt-0.5">Paste your code or upload a file / image to start analysis.</p>
+              </div>
+            </div>
+            <button id="analyze-code-btn" class="grad-btn rounded-lg px-5 py-2.5 text-sm font-semibold text-white flex items-center gap-2">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              Analyze Code
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div id="analyze-status" class="hidden mb-4 text-xs text-purple-light bg-purple-500/10 border border-purple-500/30 rounded-lg px-4 py-2.5">
+            <span id="analyze-status-text">Analyzing your code...</span>
+          </div>
+
+          <!-- Source mode tabs -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <button data-source-tab="paste" class="source-tab source-tab-active text-left rounded-xl border p-4 flex items-start gap-3">
+              <div class="w-10 h-10 rounded-lg bg-purple-500/15 text-purple-light flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-code text-lg"></i>
+              </div>
+              <div>
+                <div class="text-white font-semibold text-sm">Paste Code</div>
+                <div class="text-gray-500 text-xs mt-0.5">Type or paste your code directly</div>
+              </div>
+            </button>
+
+            <button data-source-tab="upload" class="source-tab text-left rounded-xl border p-4 flex items-start gap-3">
+              <div class="w-10 h-10 rounded-lg bg-card border border-border flex items-center justify-center shrink-0 text-gray-400">
+                <i class="fa-solid fa-file-arrow-up text-lg"></i>
+              </div>
+              <div>
+                <div class="text-white font-semibold text-sm">Upload File</div>
+                <div class="text-gray-500 text-xs mt-0.5">Upload code file from your device</div>
+              </div>
+            </button>
+
+            <button data-source-tab="image" class="source-tab text-left rounded-xl border p-4 flex items-start gap-3">
+              <div class="w-10 h-10 rounded-lg bg-card border border-border flex items-center justify-center shrink-0 text-gray-400">
+                <i class="fa-regular fa-image text-lg"></i>
+              </div>
+              <div>
+                <div class="text-white font-semibold text-sm">Paste Image</div>
+                <div class="text-gray-500 text-xs mt-0.5">Paste screenshot or image of code</div>
+              </div>
+            </button>
+          </div>
+
+          <!-- Code editor panel (shown for "Paste Code" tab) -->
+          <div id="editor-panel" class="stat-card rounded-xl overflow-hidden">
+            <div class="flex flex-wrap items-center justify-between gap-3 px-5 py-4 border-b border-border">
+              <div class="flex items-center gap-2 text-white font-semibold">
+                <i class="fa-solid fa-code text-purple-light"></i>
+                Code Editor
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-xs text-gray-500">Language</span>
+                <select id="language-select" class="bg-card border border-border text-sm text-gray-300 rounded-lg px-3 py-1.5 outline-none">
+                  <option>Auto Detect</option>
+                  <option>Python</option>
+                  <option>JavaScript</option>
+                  <option>Java</option>
+                  <option>C++</option>
+                  <option>Go</option>
+                </select>
+                <label class="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer select-none">
+                  <input type="checkbox" id="use-ai-toggle" checked class="accent-purple w-3.5 h-3.5 rounded" />
+                  AI Fix (slower)
+                </label>
+                <button id="clear-code-btn" type="button" class="text-xs text-gray-400 hover:text-red-400 flex items-center gap-1.5 px-2 py-1.5">
+                  <i class="fa-solid fa-trash text-sm"></i>
+                  Clear
+                </button>
+              </div>
+            </div>
+
+            <div class="flex code-panel border-0 relative">
+              <!-- line numbers -->
+              <div id="line-numbers" class="select-none text-right px-3 py-4 text-[13px] leading-6 text-gray-600 font-mono">1</div>
+
+              <!-- editor stack: highlighted layer behind, transparent textarea in front -->
+              <div class="flex-1 relative">
+                <pre id="code-highlight-layer" class="absolute inset-0 m-0 px-3 py-4 text-[13px] leading-6 font-mono overflow-hidden pointer-events-none whitespace-pre-wrap break-words" aria-hidden="true"><code id="code-highlight-code" class="language-python"></code></pre>
+                <textarea
+                  id="code-input"
+                  spellcheck="false"
+                  placeholder="Paste or type your code here..."
+                  class="relative w-full h-full bg-transparent outline-none resize-none px-3 py-4 text-[13px] leading-6 font-mono text-transparent caret-white whitespace-pre-wrap break-words"
+                  rows="16"
+                  style="min-height: 384px;"
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 px-5 py-3 border-t border-border text-xs text-gray-500">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-circle-info"></i>
+                Supports 50+ programming languages
+                <a href="#" class="text-purple-light hover:text-purple ml-1">View supported languages</a>
+              </div>
+              <div class="flex items-center gap-4">
+                <span>Lines: <span id="stat-lines" class="text-gray-300 font-medium">0</span></span>
+                <span>Characters: <span id="stat-chars" class="text-gray-300 font-medium">0</span></span>
+                <span>Size: <span id="stat-size" class="text-gray-300 font-medium">0 KB</span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upload File panel (hidden by default) -->
+          <div id="upload-panel" class="hidden stat-card rounded-xl p-10 text-center">
+            <input type="file" id="file-input" class="hidden" accept=".py,.js,.java,.ts,.cpp,.c,.go,.rb,.php,.txt" />
+            <i class="fa-solid fa-file-arrow-up text-4xl mx-auto mb-3 text-gray-500 block"></i>
+            <p class="text-gray-300 font-medium mb-1">Drag &amp; drop a code file, or click to browse</p>
+            <p class="text-gray-500 text-xs mb-4">Supports .py, .js, .java, .ts, .cpp and more</p>
+            <button id="browse-file-btn" type="button" class="grad-btn rounded-lg px-4 py-2 text-sm font-semibold text-white">Browse File</button>
+            <p id="uploaded-file-name" class="text-xs text-purple-light mt-3"></p>
+          </div>
+
+          <!-- Paste Image panel (hidden by default) -->
+          <div id="image-panel" class="hidden stat-card rounded-xl p-10 text-center">
+            <input type="file" id="image-input" class="hidden" accept="image/*" />
+            <i class="fa-regular fa-image text-4xl mx-auto mb-3 text-gray-500 block"></i>
+            <p class="text-gray-300 font-medium mb-1">Paste a screenshot (Ctrl+V) or click to upload</p>
+            <p class="text-gray-500 text-xs mb-4">We'll extract the code from the image</p>
+            <button id="browse-image-btn" type="button" class="grad-btn rounded-lg px-4 py-2 text-sm font-semibold text-white">Upload Image</button>
+            <p id="uploaded-image-name" class="text-xs text-purple-light mt-3"></p>
+          </div>
+
+        </div>
+        <!-- ============ END NEW ANALYSIS PAGE ============ -->
+
+        <!-- ============ ANALYSIS HISTORY PAGE (hidden by default) ============ -->
+        <div id="page-analysis-history" class="hidden">
+          <div class="mb-6">
+            <h1 class="text-2xl font-bold text-white">Analysis History</h1>
+            <p class="text-gray-500 text-sm mt-1">View and manage your past code analysis reports.</p>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+            <div class="input-shell rounded-lg px-4 py-2.5 flex items-center gap-2 w-full max-w-sm">
+              <i class="fa-solid fa-magnifying-glass text-gray-500 shrink-0"></i>
+              <input id="history-search" type="text" placeholder="Search reports..." class="bg-transparent outline-none text-sm text-gray-200 w-full" />
+            </div>
+            <select id="history-lang-filter" class="bg-card border border-border text-sm text-gray-300 rounded-lg px-3 py-2.5 outline-none">
+              <option value="">All Languages</option>
+              <option value="Python">Python</option>
+              <option value="JavaScript">JavaScript</option>
+              <option value="SQL">SQL</option>
+            </select>
+          </div>
+
+          <div class="stat-card rounded-xl overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-left text-gray-500 border-b border-border">
+                    <th class="font-medium py-3 px-5">File Name</th>
+                    <th class="font-medium py-3 px-4">Language</th>
+                    <th class="font-medium py-3 px-4">Analysis Date</th>
+                    <th class="font-medium py-3 px-5">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="history-table-body"></tbody>
+              </table>
+            </div>
+            <div id="history-count" class="text-center text-xs text-gray-500 py-4 border-t border-border"></div>
+          </div>
+        </div>
+        <!-- ============ END ANALYSIS HISTORY PAGE ============ -->
+
+        <!-- ============ REPORTS PAGE (hidden by default) ============ -->
+        <div id="page-reports" class="hidden">
+          <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div class="flex items-center gap-4">
+              <button id="report-back-btn" class="w-10 h-10 rounded-lg bg-card border border-border flex items-center justify-center text-gray-400 hover:text-white shrink-0">
+                <i class="fa-solid fa-arrow-left"></i>
+              </button>
+              <div>
+                <h1 class="text-2xl font-bold text-white">Report Details</h1>
+                <p class="text-gray-500 text-sm mt-0.5">Comprehensive analysis report of your code</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button id="report-download-pdf" class="grad-btn rounded-lg px-4 py-2.5 text-sm font-semibold text-white flex items-center gap-2">
+                <i class="fa-regular fa-file-pdf"></i>
+                Download PDF
+              </button>
+              <button id="report-download-html" class="rounded-lg px-4 py-2.5 text-sm font-semibold text-gray-200 border border-border bg-card hover:bg-cardhi flex items-center gap-2">
+                <i class="fa-solid fa-code"></i>
+                Download HTML
+              </button>
+            </div>
+          </div>
+
+          <!-- Summary cards -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+
+            <!-- Quality Score -->
+            <div class="stat-card rounded-xl p-5 flex items-center gap-5">
+              <div class="relative w-24 h-24 shrink-0">
+                <canvas id="reportQualityRing" width="96" height="96"></canvas>
+                <div id="report-quality-ring-label" class="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white">–</div>
+              </div>
+              <div>
+                <div class="text-xs text-gray-500 mb-1">Overall Quality Score</div>
+                <div class="text-white font-bold text-2xl leading-none"><span id="report-quality-score">–</span><span class="text-gray-500 text-sm font-medium">/100</span></div>
+                <div id="report-quality-label" class="text-xs font-medium mt-2 inline-flex items-center gap-1.5 px-2 py-1 rounded-md">–</div>
+              </div>
+            </div>
+
+            <!-- Severity Breakdown -->
+            <div class="stat-card rounded-xl p-5">
+              <div class="flex items-center justify-between mb-4">
+                <div class="text-xs text-gray-500 font-medium">Issues by Severity</div>
+                <div id="severity-total-label" class="text-xs text-gray-500">0 total</div>
+              </div>
+
+              <!-- proportion bar -->
+              <div id="severity-bar" class="w-full h-2 rounded-full overflow-hidden flex mb-4 bg-cardhi">
+                <div id="severity-bar-critical" class="h-full bg-red-500" style="width:0%"></div>
+                <div id="severity-bar-high" class="h-full bg-orange-400" style="width:0%"></div>
+                <div id="severity-bar-medium" class="h-full bg-yellow-300" style="width:0%"></div>
+                <div id="severity-bar-low" class="h-full bg-sky-400" style="width:0%"></div>
+              </div>
+
+              <div class="grid grid-cols-4 gap-2">
+                <div class="flex flex-col items-center gap-1 py-2 rounded-lg bg-red-500/5">
+                  <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                  <div class="text-lg font-bold text-red-400" id="severity-critical-count">0</div>
+                  <div class="text-[10px] text-gray-500">Critical</div>
+                </div>
+                <div class="flex flex-col items-center gap-1 py-2 rounded-lg bg-orange-500/5">
+                  <span class="w-2 h-2 rounded-full bg-orange-400"></span>
+                  <div class="text-lg font-bold text-orange-400" id="severity-high-count">0</div>
+                  <div class="text-[10px] text-gray-500">High</div>
+                </div>
+                <div class="flex flex-col items-center gap-1 py-2 rounded-lg bg-yellow-500/5">
+                  <span class="w-2 h-2 rounded-full bg-yellow-300"></span>
+                  <div class="text-lg font-bold text-yellow-300" id="severity-medium-count">0</div>
+                  <div class="text-[10px] text-gray-500">Medium</div>
+                </div>
+                <div class="flex flex-col items-center gap-1 py-2 rounded-lg bg-sky-500/5">
+                  <span class="w-2 h-2 rounded-full bg-sky-400"></span>
+                  <div class="text-lg font-bold text-sky-400" id="severity-low-count">0</div>
+                  <div class="text-[10px] text-gray-500">Low</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Category Breakdown -->
+            <div class="stat-card rounded-xl p-5">
+              <div class="text-xs text-gray-500 font-medium mb-4">Issues by Category</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-7 h-7 rounded-lg bg-rose-500/15 text-rose-400 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-bug text-sm"></i>
+                  </div>
+                  <span class="text-sm text-gray-300 flex-1">Bugs</span>
+                  <span id="category-bug-count" class="text-sm font-semibold text-white">0</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-7 h-7 rounded-lg bg-red-500/15 text-red-400 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-lock text-sm"></i>
+                  </div>
+                  <span class="text-sm text-gray-300 flex-1">Security</span>
+                  <span id="category-security-count" class="text-sm font-semibold text-white">0</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-7 h-7 rounded-lg bg-sky-500/15 text-sky-400 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-bolt text-sm"></i>
+                  </div>
+                  <span class="text-sm text-gray-300 flex-1">Performance</span>
+                  <span id="category-performance-count" class="text-sm font-semibold text-white">0</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-7 h-7 rounded-lg bg-purple-500/15 text-purple-light flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-palette text-sm"></i>
+                  </div>
+                  <span class="text-sm text-gray-300 flex-1">Style</span>
+                  <span id="category-style-count" class="text-sm font-semibold text-white">0</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- File info bar -->
+          <div class="stat-card rounded-xl p-4 mb-6 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm">
+            <div id="report-file-name" class="text-gray-200 font-medium">—</div>
+            <div id="report-language" class="text-gray-200 font-medium">—</div>
+            <div id="report-line-count" class="text-gray-200 font-medium">—</div>
+            <div id="report-analyzed-on" class="text-gray-200 font-medium">—</div>
+            <div id="report-analysis-id" class="text-gray-200 font-medium">—</div>
+          </div>
+
+          <!-- AI Explanation -->
+          <div id="ai-explanation-box" class="hidden stat-card rounded-xl p-4 mb-6 border-l-4 border-purple-500">
+            <div class="flex items-center gap-2 text-purple-light font-semibold text-sm mb-2">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              AI Summary
+            </div>
+            <p id="ai-explanation-text" class="text-sm text-gray-300 leading-relaxed"></p>
+          </div>
+
+          <div id="risky-suggestions-box" class="hidden stat-card rounded-xl p-4 mb-6 border-l-4 border-amber-500">
+            <div class="flex items-center gap-2 text-amber-400 font-semibold text-sm mb-3">
+              <i class="ti ti-alert-triangle" style="font-size:16px;"></i>
+              Suggested Fixes
+            </div>
+            <div id="risky-suggestions-list" class="space-y-4"></div>
+          </div>
+
+
+          <!-- Original vs fixed-code quality score comparison -->
+          <div id="quality-score-comparison"
+              class="hidden grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+
+            <div class="stat-card rounded-xl p-4">
+              <div class="text-gray-400 text-sm font-semibold mb-2">
+                Original Quality Score
+              </div>
+              <div id="original-quality-score"
+                  class="text-2xl font-bold text-white">--/100</div>
+            </div>
+
+            <div class="stat-card rounded-xl p-4">
+              <div class="text-emerald-400 text-sm font-semibold mb-2">
+                Fixed Code Quality Score
+              </div>
+              <div id="fixed-quality-score"
+                  class="text-2xl font-bold text-white">--/100</div>
+            </div>
+
+            <div class="stat-card rounded-xl p-4">
+              <div class="text-blue-400 text-sm font-semibold mb-2">
+                Quality Score Change
+              </div>
+              <div id="quality-score-change"
+                  class="text-sm font-semibold text-gray-400">-- points</div>
+            </div>
+
+          </div>
+
+
+
+          <!-- Code Analysis Summary -->
+          <div id="verification-results" class="hidden mb-6">
+            <div class="stat-card rounded-xl p-5">
+              <h3 class="text-white text-base font-semibold mb-4">
+                Code Analysis Summary
+              </h3>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="rounded-lg bg-gray-800/60 p-4">
+                  <div class="text-gray-400 text-sm mb-1">Analysis Status</div>
+                  <div id="analysis-status"
+                      class="text-white font-semibold">
+                    Awaiting analysis
+                  </div>
+                </div>
+
+                <div class="rounded-lg bg-gray-800/60 p-4">
+                  <div class="text-gray-400 text-sm mb-1">Fix Verification</div>
+                  <div id="fix-verification-status"
+                      class="text-white font-semibold">
+                    Not verified
+                  </div>
+                </div>
+              </div>
+
+              <p class="text-gray-400 text-sm mt-4">
+                Review the detected issues below and check the verification
+                status before using AI-generated code.
+              </p>
+            </div>
+          </div>
+
+
+          <!-- Tabs -->
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div class="flex items-center gap-5 text-sm font-medium border-b border-border w-full sm:w-auto">
+              <button data-report-tab="all" class="report-tab report-tab-active pb-3">All Issues <span id="tab-count-all" class="text-gray-500"></span></button>
+              <button data-report-tab="bug" class="report-tab pb-3">Bugs <span id="tab-count-bug" class="text-gray-500"></span></button>
+              <button data-report-tab="security" class="report-tab pb-3">Security <span id="tab-count-security" class="text-gray-500"></span></button>
+              <button data-report-tab="performance" class="report-tab pb-3">Performance <span id="tab-count-performance" class="text-gray-500"></span></button>
+              <button data-report-tab="style" class="report-tab pb-3">Style <span id="tab-count-style" class="text-gray-500"></span></button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Issues list -->
+            <div>
+              <div class="text-white font-semibold text-sm mb-3">Issues Found (12)</div>
+              <div id="report-issues-list" class="space-y-2"></div>
+            </div>
+
+            
+            <!-- Fixed-code re-scan findings -->
+            <div id="fixed-issues-section" class="hidden mt-6">
+              <div class="text-white font-semibold text-sm mb-2">
+                Fixed-Code Re-scan Findings
+              </div>
+
+              <p class="text-gray-400 text-xs mb-3">
+                Issues detected when the AI-generated code was analyzed again.
+              </p>
+
+              <div id="fixed-issues-list" class="space-y-2"></div>
+            </div>
+
+
+            <!-- Issue details -->
+            <div class="stat-card rounded-xl p-5">
+              <div class="flex items-center justify-between mb-4">
+                <div class="text-white font-semibold text-sm">Issue Details</div>
+                <span id="issue-detail-severity" class="badge-critical text-xs font-medium px-2 py-0.5 rounded-md">Critical</span>
+              </div>
+              <div id="issue-detail-title" class="text-white font-semibold mb-1">Hardcoded value detected</div>
+              <div id="issue-detail-meta" class="text-xs text-gray-500 mb-4">Security • Line 23</div>
+
+              <div class="text-xs text-gray-400 font-semibold mb-1.5">Description</div>
+              <p id="issue-detail-description" class="text-sm text-gray-400 mb-4 leading-relaxed">Hardcoding sensitive information such as passwords, API keys, or secrets in the source code can lead to security vulnerabilities.</p>
+
+              <div class="flex items-center justify-between mb-1.5">
+                <div class="text-xs text-gray-400 font-semibold">Code Snippet (Original)</div>
+                <button data-copy-target="issue-detail-original" class="copy-btn text-xs text-gray-500 hover:text-purple-light flex items-center gap-1">
+                  <i class="fa-regular fa-copy text-xs"></i>
+                  Copy
+                </button>
+              </div>
+              <pre id="issue-detail-original" class="code-panel rounded-lg p-3 text-xs leading-6 overflow-x-auto mb-4"></pre>
+
+              <div class="text-xs text-gray-400 font-semibold mb-1.5">Recommendation</div>
+              <p id="issue-detail-recommendation" class="text-sm text-gray-400 mb-4 leading-relaxed">Use environment variables or secure credential management instead of hardcoding.</p>
+
+              <div class="flex items-center justify-between mb-1.5">
+                <div class="text-xs text-gray-400 font-semibold">Fixed Code (Optimized)</div>
+                <button data-copy-target="issue-detail-fixed" class="copy-btn text-xs text-gray-500 hover:text-purple-light flex items-center gap-1">
+                  <i class="fa-regular fa-copy text-xs"></i>
+                  Copy
+                </button>
+              </div>
+              <pre id="issue-detail-fixed" class="code-panel rounded-lg p-3 text-xs leading-6 overflow-x-auto"></pre>
+            </div>
+          </div>
+        </div>
+        <!-- ============ END REPORTS PAGE ============ -->
+
+        <!-- ============ COMPARE CODE PAGE (hidden by default) ============ -->
+        <div id="page-compare-code" class="hidden">
+          <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div>
+              <h1 class="text-2xl font-bold text-white">Compare Code</h1>
+              <p class="text-gray-500 text-sm mt-0.5">Side-by-side comparison of original and optimized code</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <button id="compare-download-original" class="rounded-lg px-4 py-2.5 text-sm font-semibold text-gray-200 border border-border bg-card hover:bg-cardhi flex items-center gap-2">
+                <i class="fa-solid fa-download"></i>
+                Download Original
+              </button>
+              <button id="compare-download-optimized" class="rounded-lg px-4 py-2.5 text-sm font-semibold text-white border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 flex items-center gap-2">
+                <i class="fa-solid fa-download"></i>
+                Download Optimized
+              </button>
+            </div>
+          </div>
+
+          <div class="stat-card rounded-xl p-4 mb-4 flex flex-wrap items-center justify-between gap-3 text-sm">
+            <div class="flex items-center gap-3">
+              <span id="compare-language" class="text-blue-400 font-medium">—</span>
+              <span id="compare-filename" class="text-gray-500">No analysis yet</span>
+            </div>
+            <span id="compare-date" class="text-gray-500 text-xs"></span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="code-panel rounded-lg overflow-hidden">
+              <div class="flex items-center justify-between px-4 py-2.5 border-b border-border text-red-400 text-sm font-medium">
+                <span>Original Code</span>
+                <span id="compare-original-lines" class="text-gray-500 text-xs font-normal">0 Lines</span>
+              </div>
+              <pre id="compare-original-code" class="p-4 text-xs leading-6 overflow-x-auto max-h-[420px] overflow-y-auto whitespace-pre-wrap"></pre>
+            </div>
+            <div class="code-panel rounded-lg overflow-hidden">
+              <div class="flex items-center justify-between px-4 py-2.5 border-b border-border text-emerald-400 text-sm font-medium">
+                <span>Optimized Code</span>
+                <span id="compare-optimized-lines" class="text-gray-500 text-xs font-normal">0 Lines</span>
+              </div>
+              <pre id="compare-optimized-code" class="p-4 text-xs leading-6 overflow-x-auto max-h-[420px] overflow-y-auto whitespace-pre-wrap">(No AI fix available yet — run an analysis with "AI Fix" enabled)</pre>
+            </div>
+          </div>
+
+          <div id="compare-summary" class="stat-card rounded-xl p-4 flex flex-wrap items-center gap-4">
+            <div class="flex items-center gap-2 text-gray-500 text-sm font-medium">
+              Run an analysis from "New Analysis" to see a comparison here.
+            </div>
+          </div>
+        </div>
+        <!-- ============ END COMPARE CODE PAGE ============ -->
+
+        <!-- ============ HELP & SUPPORT PAGE (hidden by default) ============ -->
+        <div id="page-help-support" class="hidden">
+          <div class="mb-6">
+            <h1 class="text-2xl font-bold text-white">Help &amp; Support</h1>
+            <p class="text-gray-500 text-sm mt-1">Find answers or get in touch with our team.</p>
+          </div>
+
+          <div class="input-shell rounded-lg px-4 py-3 flex items-center gap-3 mb-8 max-w-xl">
+            <i class="fa-solid fa-magnifying-glass text-gray-500 shrink-0"></i>
+            <input type="text" placeholder="Search for help..." class="bg-transparent outline-none text-sm text-gray-200 w-full" />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <div class="stat-card rounded-xl p-5">
+              <div class="w-10 h-10 rounded-lg bg-purple-500/15 text-purple-light flex items-center justify-center mb-3">
+                <i class="fa-regular fa-comment-dots text-lg"></i>
+              </div>
+              <div class="text-white font-semibold text-sm mb-1">Live Chat</div>
+              <div class="text-gray-500 text-xs mb-3">Chat with our support team in real-time.</div>
+              <a href="#" class="text-purple-light text-xs font-semibold">Start Chat →</a>
+            </div>
+            <div class="stat-card rounded-xl p-5">
+              <div class="w-10 h-10 rounded-lg bg-sky-500/15 text-sky-400 flex items-center justify-center mb-3">
+                <i class="fa-regular fa-envelope text-lg"></i>
+              </div>
+              <div class="text-white font-semibold text-sm mb-1">Email Support</div>
+              <div class="text-gray-500 text-xs mb-3">support@aicodeanalyzer.com</div>
+              <a href="mailto:support@aicodeanalyzer.com" class="text-sky-400 text-xs font-semibold">Send Email →</a>
+            </div>
+            <div class="stat-card rounded-xl p-5">
+              <div class="w-10 h-10 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-3">
+                <i class="fa-regular fa-file-lines text-lg"></i>
+              </div>
+              <div class="text-white font-semibold text-sm mb-1">Documentation</div>
+              <div class="text-gray-500 text-xs mb-3">Guides and API references.</div>
+              <a href="#" class="text-emerald-400 text-xs font-semibold">Browse Docs →</a>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- FAQ accordion -->
+            <div class="stat-card rounded-xl p-5">
+              <div class="text-white font-semibold mb-4">Frequently Asked Questions</div>
+              <div id="faq-list" class="space-y-2"></div>
+            </div>
+
+            <!-- Contact form -->
+            <div class="stat-card rounded-xl p-5">
+              <div class="text-white font-semibold mb-4">Contact Us</div>
+              <form id="support-form" class="space-y-4">
+                <div>
+                  <label class="text-sm text-gray-300 mb-1.5 block">Subject</label>
+                  <div class="input-shell rounded-lg px-4 py-2.5">
+                    <input type="text" required placeholder="What do you need help with?" />
+                  </div>
+                </div>
+                <div>
+                  <label class="text-sm text-gray-300 mb-1.5 block">Message</label>
+                  <div class="input-shell rounded-lg px-4 py-2.5">
+                    <textarea rows="5" required placeholder="Describe your issue..." class="bg-transparent outline-none text-sm text-gray-200 w-full resize-none"></textarea>
+                  </div>
+                </div>
+                <button type="submit" class="grad-btn rounded-lg px-5 py-2.5 text-sm font-semibold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-paper-plane"></i>
+                  Send Message
+                </button>
+                <p id="support-form-message" class="hidden text-sm text-emerald-400"></p>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- ============ END HELP & SUPPORT PAGE ============ -->
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Our custom JS -->
+  <script src="js/script.js"></script>
+</body>
+</html>

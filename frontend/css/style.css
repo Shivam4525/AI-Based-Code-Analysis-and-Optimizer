@@ -1,0 +1,567 @@
+/* ==========================================================================
+   AI CODE ANALYSIS & OPTIMIZER — style.css
+   Premium dark theme: layered background, 3D cards, refined color system
+   ========================================================================== */
+
+* { box-sizing: border-box; }
+html, body { background: #06050e; }
+body { font-family: 'Inter', sans-serif; }
+
+/* ============ PREMIUM BACKGROUND — layered mesh + subtle grain ============ */
+.bg-radial {
+  position: relative;
+  background:
+    radial-gradient(48% 40% at 10% 6%,  rgba(139, 92, 246, 0.20) 0%, transparent 62%),
+    radial-gradient(40% 36% at 95% 12%, rgba(56, 189, 248, 0.09) 0%, transparent 58%),
+    radial-gradient(46% 42% at 88% 94%, rgba(99, 63, 240, 0.16) 0%, transparent 60%),
+    radial-gradient(38% 34% at 4% 92%,  rgba(236, 72, 153, 0.06) 0%, transparent 55%),
+    radial-gradient(60% 60% at 50% 50%, rgba(10, 8, 22, 0.5) 0%, transparent 70%),
+    linear-gradient(180deg, #050409 0%, #030308 45%, #040308 100%);
+  background-attachment: fixed;
+  isolation: isolate;
+}
+
+/* fine grain texture overlay for a premium, non-flat feel */
+.bg-radial::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* soft top glow band, gives cards below a sense of light source */
+.bg-radial::after {
+  content: "";
+  position: fixed;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140%;
+  height: 60%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(50% 50% at 50% 0%, rgba(124, 92, 255, 0.10) 0%, transparent 70%);
+}
+
+.bg-radial > * { position: relative; z-index: 1; }
+
+/* ============ CORE COLOR TOKENS ============ */
+:root {
+  --accent: #7c5cff;
+  --accent-2: #a78bfa;
+  --accent-deep: #4f3ff0;
+  --success: #34d399;
+  --danger: #f87171;
+  --warning: #fbbf24;
+  --info: #38bdf8;
+  --surface: #121123;
+  --surface-hi: #17152c;
+  --border-subtle: #221f3c;
+  --border-hover: #453f7a;
+}
+
+/* ============ BUTTONS ============ */
+.grad-btn {
+  background: linear-gradient(135deg, #a693ff 0%, #7c5cff 45%, #5b3ff0 100%);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.25) inset,
+    0 4px 10px -2px rgba(10, 8, 24, 0.5),
+    0 10px 26px -8px rgba(124, 92, 255, 0.5);
+  transition: filter .15s ease, transform .15s ease, box-shadow .2s ease;
+}
+.grad-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.3) inset,
+    0 6px 14px -2px rgba(10, 8, 24, 0.55),
+    0 14px 34px -8px rgba(124, 92, 255, 0.62);
+}
+.grad-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px -6px rgba(124, 92, 255, 0.5);
+}
+
+.divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #26233f, transparent); }
+
+/* ============ INPUTS ============ */
+.input-shell {
+  background: #0f0e1e;
+  border: 1px solid #24223a;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.input-shell:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(109,92,245,0.15);
+}
+.input-shell input {
+  background: transparent;
+  outline: none;
+  color: #e7e6f5;
+  width: 100%;
+}
+.input-shell input::placeholder { color: #62607c; }
+
+/* ============ SIDEBAR NAV ============ */
+.nav-item {
+  color: #9694ad;
+  transition: background .15s ease, color .15s ease, transform .15s ease;
+}
+.nav-item:hover { background: #17162e; color: #d9d8ec; transform: translateX(2px); }
+.nav-item.active {
+  background: linear-gradient(135deg, #8b74ff 0%, #4f3ff0 100%);
+  color: #fff;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.2) inset,
+    0 10px 24px -8px rgba(124, 92, 255, 0.55);
+}
+
+aside {
+  position: relative;
+  background: linear-gradient(180deg, #0e0d1c 0%, #0a0916 55%, #07060f 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    10px 0 40px -14px rgba(2, 1, 8, 0.75),
+    14px 0 45px -18px rgba(124, 92, 255, 0.22);
+}
+aside::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; right: 0;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(139,116,255,0.5) 0%, rgba(139,116,255,0) 45%);
+  pointer-events: none;
+}
+
+/* ============ 3D STAT CARDS ============ */
+.stat-card {
+  background: linear-gradient(160deg, #1e1b3d 0%, #17152c 100%);
+  border: 1px solid #2c294d;
+  border-radius: 14px;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.07) inset,
+    0 2px 6px 0 rgba(2, 1, 8, 0.35),
+    0 20px 40px -18px rgba(2, 1, 8, 0.7),
+    0 10px 28px -10px rgba(124, 92, 255, 0.22);
+  transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+  will-change: transform;
+}
+.stat-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-6px);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.1) inset,
+    0 4px 10px 0 rgba(2, 1, 8, 0.4),
+    0 28px 50px -18px rgba(2, 1, 8, 0.75),
+    0 14px 36px -10px rgba(124, 92, 255, 0.32);
+}
+
+/* Premium variant — used for hero / featured cards */
+.stat-card-premium {
+  background: linear-gradient(160deg, #241f52 0%, #181433 100%);
+  border: 1px solid #453f8a;
+  border-radius: 16px;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.08) inset,
+    0 3px 8px 0 rgba(2, 1, 8, 0.4),
+    0 26px 48px -18px rgba(2, 1, 8, 0.75),
+    0 14px 38px -10px rgba(124, 92, 255, 0.28);
+  transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+  backface-visibility: hidden;
+}
+.stat-card-premium:hover {
+  border-color: #8b6bff;
+  transform: translateY(-7px);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.12) inset,
+    0 5px 12px 0 rgba(2, 1, 8, 0.45),
+    0 34px 60px -18px rgba(2, 1, 8, 0.8),
+    0 18px 48px -10px rgba(124, 92, 255, 0.4);
+}
+
+/* ============ ICON TILES — glowing 3D chips used inside stat cards ============ */
+.icon-glow {
+  border: 1px solid rgba(255,255,255,0.07);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.12) inset,
+    0 4px 12px -4px rgba(0,0,0,0.5);
+}
+.icon-glow-emerald {
+  background: linear-gradient(145deg, rgba(52,211,153,0.28), rgba(52,211,153,0.06));
+  color: #34d399;
+  box-shadow: 0 0 22px -4px rgba(52,211,153,0.65), 0 1px 0 0 rgba(255,255,255,0.12) inset;
+}
+.icon-glow-red {
+  background: linear-gradient(145deg, rgba(248,113,113,0.28), rgba(248,113,113,0.06));
+  color: #f87171;
+  box-shadow: 0 0 22px -4px rgba(248,113,113,0.65), 0 1px 0 0 rgba(255,255,255,0.12) inset;
+}
+.icon-glow-purple {
+  background: linear-gradient(145deg, rgba(167,139,250,0.28), rgba(167,139,250,0.06));
+  color: #c4b5fd;
+  box-shadow: 0 0 22px -4px rgba(167,139,250,0.65), 0 1px 0 0 rgba(255,255,255,0.12) inset;
+}
+.icon-glow-sky {
+  background: linear-gradient(145deg, rgba(56,189,248,0.28), rgba(56,189,248,0.06));
+  color: #7dd3fc;
+  box-shadow: 0 0 22px -4px rgba(56,189,248,0.65), 0 1px 0 0 rgba(255,255,255,0.12) inset;
+}
+.icon-glow-amber {
+  background: linear-gradient(145deg, rgba(245,158,11,0.28), rgba(245,158,11,0.06));
+  color: #fbbf24;
+  box-shadow: 0 0 22px -4px rgba(245,158,11,0.65), 0 1px 0 0 rgba(255,255,255,0.12) inset;
+}
+
+/* ============ CODE PANELS ============ */
+.code-panel {
+  background: linear-gradient(160deg, #0d0c1c 0%, #09081a 100%);
+  background-color: #0b0a17;
+  border: 1px solid #211f38;
+  border-radius: 12px;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.03) inset,
+    0 10px 24px -12px rgba(0,0,0,0.55);
+}
+.code-line-num { color: #4a4869; user-select: none; }
+
+/* ============ SCROLLBARS ============ */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #26233f; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #35305a; }
+
+/* ============ ANIMATIONS ============ */
+.fade-in { animation: fadeIn .45s ease both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.switch-page { transition: opacity .3s ease; }
+
+/* ============ SEVERITY / STATUS BADGES ============ */
+.badge-critical { background: rgba(248,113,113,0.15); color: #fb7185; }
+.badge-high     { background: rgba(251,191,36,0.15);  color: #fbbf24; }
+.badge-medium   { background: rgba(253,224,71,0.15);  color: #fde047; }
+.badge-low      { background: rgba(56,189,248,0.15);  color: #93c5fd; }
+
+/* ============ LIGHT MODE OVERRIDES ============ */
+.light body-light { background: #f5f5fa; }
+.light-mode { background: #f4f4fb !important; color: #1e1c33; }
+.light-mode .panel-lm { background: #ffffff !important; border-color: #e6e5f2 !important; }
+.light-mode .card-lm  { background: #ffffff !important; border-color: #e9e8f4 !important; }
+.light-mode .text-invert  { color: #1e1c33 !important; }
+.light-mode .muted-invert { color: #68667f !important; }
+
+/* ============ SOURCE TABS (New Analysis page) ============ */
+.source-tab {
+  background: #121123;
+  border-color: #211f38;
+  border-radius: 12px;
+  transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+.source-tab:hover { border-color: #322f52; transform: translateY(-1px); }
+.source-tab-active {
+  border-color: var(--accent) !important;
+  background: rgba(109,92,245,0.08) !important;
+  box-shadow: 0 8px 20px -10px rgba(109,92,245,0.4);
+}
+
+/* ============ REPORT TABS ============ */
+.report-tab {
+  color: #9694ad;
+  border-bottom: 2px solid transparent;
+  transition: color .15s ease, border-color .15s ease;
+}
+.report-tab:hover { color: #d9d8ec; }
+.report-tab-active {
+  color: #a78bfa !important;
+  border-color: var(--accent) !important;
+}
+
+/* ============ ISSUE LIST ITEMS ============ */
+.issue-item {
+  background: #121123;
+  border: 1px solid #211f38;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+.issue-item:hover { border-color: #322f52; transform: translateX(2px); }
+.issue-item-active {
+  border-color: var(--accent) !important;
+  background: rgba(109,92,245,0.08) !important;
+}
+.issue-item-critical { border-left: 3px solid #f87171; }
+
+/* ============ CATEGORY ROWS (Issue Summary) ============ */
+.category-row {
+  padding: 10px;
+  margin: -10px;
+  border-radius: 10px;
+  transition: background .2s ease;
+}
+.category-row:hover { background: rgba(124, 92, 255, 0.08); }
+
+/* ============ FAQ / COPY BUTTONS ============ */
+.faq-question { cursor: pointer; transition: color .15s ease; }
+.faq-question:hover { color: #a78bfa; }
+.copy-btn { transition: color .15s ease; }
+
+/* ============ PROGRESS BARS — smooth animated fills ============ */
+#severity-bar > div,
+#dash-severity-bar > div,
+[id^="dash-cat-bar-"] {
+  transition: width 0.6s cubic-bezier(.4,0,.2,1);
+}
+
+/* ============ TYPOGRAPHY SCALE ============ */
+.page-title    { font-size: 24px; font-weight: 700; color: #ffffff; line-height: 1.3; }
+.page-subtitle { font-size: 14px; color: #8b899e; margin-top: 2px; }
+
+.card-title    { font-size: 17px; font-weight: 600; color: #ffffff; line-height: 1.4; }
+.card-subtitle { font-size: 12px; color: #8b899e; margin-top: 1px; }
+
+.stat-label  { font-size: 13px; font-weight: 500; color: #a8a6bc; }
+.stat-value  { font-size: 26px; font-weight: 700; color: #ffffff; letter-spacing: -0.02em; }
+.stat-unit   { font-size: 14px; font-weight: 500; color: #6f6d85; }
+.stat-status { font-size: 12.5px; font-weight: 500; }
+
+.body-text { font-size: 14px; font-weight: 400; line-height: 1.6; color: #b8b6cc; }
+
+.row-label { font-size: 14px; font-weight: 500; color: #d1cfe3; }
+.row-value { font-size: 14px; font-weight: 700; color: #ffffff; }
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6f6d85;
+}
+
+.table-head { font-size: 13px; font-weight: 600; color: #8b899e; }
+.table-cell { font-size: 14px; font-weight: 500; color: #d1cfe3; }
+
+/* ============ PRINT STYLES (Download PDF) ============ */
+@media print {
+  body * { visibility: hidden; }
+  #page-reports, #page-reports * { visibility: visible; }
+  #page-reports {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 20px;
+    background: white !important;
+    color: black !important;
+  }
+  #page-reports .stat-card, #page-reports .issue-item, #page-reports .code-panel {
+    border: 1px solid #ccc !important;
+    background: #f9f9f9 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    break-inside: avoid;
+  }
+  #page-reports .text-white, #page-reports .text-gray-200, #page-reports .text-gray-300 {
+    color: #111 !important;
+  }
+  #page-reports .text-gray-400, #page-reports .text-gray-500 {
+    color: #555 !important;
+  }
+  #page-reports button, #report-download-pdf, #report-download-html,
+  #report-back-btn, .copy-btn {
+    display: none !important;
+  }
+  #page-reports .grid.grid-cols-1.lg\:grid-cols-2 {
+    grid-template-columns: 1fr !important;
+  }
+  canvas { display: none !important; }
+}
+
+/* ============ CODE EDITOR — font + syntax colors ============ */
+#code-input, #code-highlight-layer {
+  font-family: 'Fira Code', 'Cascadia Code', Consolas, 'Courier New', monospace;
+  font-size: 13.5px;
+  line-height: 1.7;
+  tab-size: 4;
+}
+#code-highlight-layer { color: #e5e5f0; }
+
+#code-highlight-layer,
+#code-highlight-layer code {
+  background: transparent !important;
+  text-shadow: none !important;
+}
+
+#code-highlight-layer .token.keyword     { color: #c586ff; font-weight: 600; }
+#code-highlight-layer .token.string      { color: #7ee787; }
+#code-highlight-layer .token.comment     { color: #6b7280; font-style: italic; }
+#code-highlight-layer .token.function    { color: #79c0ff; }
+#code-highlight-layer .token.number      { color: #f2cc60; }
+#code-highlight-layer .token.operator    { color: #ff9d7a; }
+#code-highlight-layer .token.class-name  { color: #ffd580; }
+#code-highlight-layer .token.builtin     { color: #79c0ff; }
+#code-highlight-layer .token.punctuation { color: #9d99b3; }
+#code-highlight-layer .token.boolean     { color: #f2cc60; }
+#code-highlight-layer .token.property    { color: #a5d6ff; }
+
+/* Same vivid syntax colors applied to Reports / Compare Code / Dashboard code panels */
+#issue-detail-original, #issue-detail-fixed,
+#compare-original-code, #compare-optimized-code,
+#dash-original-code, #dash-optimized-code {
+  color: #e5e5f0;
+}
+
+#issue-detail-original .token.keyword, #issue-detail-fixed .token.keyword,
+#compare-original-code .token.keyword, #compare-optimized-code .token.keyword,
+#dash-original-code .token.keyword, #dash-optimized-code .token.keyword {
+  color: #c586ff; font-weight: 600;
+}
+#issue-detail-original .token.string, #issue-detail-fixed .token.string,
+#compare-original-code .token.string, #compare-optimized-code .token.string,
+#dash-original-code .token.string, #dash-optimized-code .token.string {
+  color: #7ee787;
+}
+#issue-detail-original .token.comment, #issue-detail-fixed .token.comment,
+#compare-original-code .token.comment, #compare-optimized-code .token.comment,
+#dash-original-code .token.comment, #dash-optimized-code .token.comment {
+  color: #6b7280; font-style: italic;
+}
+#issue-detail-original .token.function, #issue-detail-fixed .token.function,
+#compare-original-code .token.function, #compare-optimized-code .token.function,
+#dash-original-code .token.function, #dash-optimized-code .token.function {
+  color: #79c0ff;
+}
+#issue-detail-original .token.number, #issue-detail-fixed .token.number,
+#compare-original-code .token.number, #compare-optimized-code .token.number,
+#dash-original-code .token.number, #dash-optimized-code .token.number {
+  color: #f2cc60;
+}
+#issue-detail-original .token.operator, #issue-detail-fixed .token.operator,
+#compare-original-code .token.operator, #compare-optimized-code .token.operator,
+#dash-original-code .token.operator, #dash-optimized-code .token.operator {
+  color: #ff9d7a;
+}
+#issue-detail-original .token.punctuation, #issue-detail-fixed .token.punctuation,
+#compare-original-code .token.punctuation, #compare-optimized-code .token.punctuation,
+#dash-original-code .token.punctuation, #dash-optimized-code .token.punctuation {
+  color: #9d99b3;
+}
+#issue-detail-original pre, #issue-detail-fixed pre,
+#compare-original-code pre, #compare-optimized-code pre,
+#dash-original-code pre, #dash-optimized-code pre {
+  background: transparent !important;
+  text-shadow: none !important;
+}
+
+/* Kill stray shadows / resize handles on all code panels */
+.code-panel pre,
+.code-panel textarea,
+#compare-original-code, #compare-optimized-code,
+#dash-original-code, #dash-optimized-code,
+#issue-detail-original, #issue-detail-fixed,
+#code-highlight-layer, #code-input {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  resize: none !important;
+}
+.code-panel pre code,
+#compare-original-code code, #compare-optimized-code code,
+#dash-original-code code, #dash-optimized-code code,
+#issue-detail-original code, #issue-detail-fixed code {
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
+/* ============ 3D DONUT CHART — floating shadow beneath the canvas ============ */
+#issueDonut {
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.5))
+          drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+}
+
+/* ============ ISSUE SUMMARY — brighter, popping colors + glow ============ */
+
+/* Severity progress bar segments — vivid gradient fills with a soft glow */
+#dash-sev-bar-critical {
+  background: linear-gradient(90deg, #ff5c7a, #ff3d63) !important;
+  box-shadow: 0 0 10px rgba(255, 92, 122, 0.55);
+}
+#dash-sev-bar-high {
+  background: linear-gradient(90deg, #ff9d3d, #ff8000) !important;
+  box-shadow: 0 0 10px rgba(255, 157, 61, 0.55);
+}
+#dash-sev-bar-medium {
+  background: linear-gradient(90deg, #ffe25c, #ffce00) !important;
+  box-shadow: 0 0 10px rgba(255, 226, 92, 0.5);
+}
+#dash-sev-bar-low {
+  background: linear-gradient(90deg, #3fc7ff, #0ea5e9) !important;
+  box-shadow: 0 0 10px rgba(63, 199, 255, 0.55);
+}
+
+/* Category bars (Bugs / Security / Performance / Style) — same treatment */
+#dash-cat-bar-bug {
+  background: linear-gradient(90deg, #ff6b8f, #ff3d63) !important;
+  box-shadow: 0 0 8px rgba(255, 107, 143, 0.5);
+}
+#dash-cat-bar-security {
+  background: linear-gradient(90deg, #ff5c7a, #e11d48) !important;
+  box-shadow: 0 0 8px rgba(255, 92, 122, 0.5);
+}
+#dash-cat-bar-performance {
+  background: linear-gradient(90deg, #3fc7ff, #0ea5e9) !important;
+  box-shadow: 0 0 8px rgba(63, 199, 255, 0.5);
+}
+#dash-cat-bar-style {
+  background: linear-gradient(90deg, #c084fc, #9333ea) !important;
+  box-shadow: 0 0 8px rgba(192, 132, 252, 0.5);
+}
+
+/* ============ CATEGORY ICON CHIPS — glowing pop instead of flat/dull ============ */
+.icon-chip {
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 1px 0 0 rgba(255,255,255,0.14) inset;
+}
+.icon-chip-bug {
+  background: linear-gradient(145deg, rgba(251,113,133,0.35), rgba(251,113,133,0.08));
+  color: #fda4b3;
+  box-shadow: 0 0 14px -2px rgba(251,113,133,0.75), 0 1px 0 0 rgba(255,255,255,0.14) inset;
+}
+.icon-chip-security {
+  background: linear-gradient(145deg, rgba(248,113,113,0.35), rgba(248,113,113,0.08));
+  color: #fca5a5;
+  box-shadow: 0 0 14px -2px rgba(248,113,113,0.75), 0 1px 0 0 rgba(255,255,255,0.14) inset;
+}
+.icon-chip-performance {
+  background: linear-gradient(145deg, rgba(56,189,248,0.35), rgba(56,189,248,0.08));
+  color: #7dd3fc;
+  box-shadow: 0 0 14px -2px rgba(56,189,248,0.75), 0 1px 0 0 rgba(255,255,255,0.14) inset;
+}
+.icon-chip-style {
+  background: linear-gradient(145deg, rgba(167,139,250,0.35), rgba(167,139,250,0.08));
+  color: #c4b5fd;
+  box-shadow: 0 0 14px -2px rgba(167,139,250,0.75), 0 1px 0 0 rgba(255,255,255,0.14) inset;
+}
+
+/* ============ ICON POP — the icon glyph itself lifts, not just the chip background ============ */
+.icon-chip i,
+.icon-glow i {
+  font-size: 20px;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
+  transform: translateZ(0);
+}
+.icon-chip-bug i         { filter: drop-shadow(0 0 6px rgba(251,113,133,0.9)) drop-shadow(0 2px 2px rgba(0,0,0,0.4)); }
+.icon-chip-security i    { filter: drop-shadow(0 0 6px rgba(248,113,113,0.9)) drop-shadow(0 2px 2px rgba(0,0,0,0.4)); }
+.icon-chip-performance i { filter: drop-shadow(0 0 6px rgba(56,189,248,0.9))  drop-shadow(0 2px 2px rgba(0,0,0,0.4)); }
+.icon-chip-style i       { filter: drop-shadow(0 0 6px rgba(167,139,250,0.9)) drop-shadow(0 2px 2px rgba(0,0,0,0.4)); }
+
+.icon-glow-emerald i { filter: drop-shadow(0 0 7px rgba(52,211,153,0.9))  drop-shadow(0 2px 2px rgba(0,0,0,0.4)); }
+.icon-glow-red i      { filter: drop-shadow(0 0 7px rgba(248,113,113,0.9)) drop-shadow(0 2px 2px rgba(0,0,0,0.4)); }
+.icon-glow-purple i    { filter: drop-shadow(0 0 7px rgba(167,139,250,0.9)) drop-shadow(0 2px 2px rgba(0,0,0,0.4)); }
+.icon-glow-sky i        { filter: drop-shadow(0 0 7px rgba(56,189,248,0.9))  drop-shadow(0 2px 2px rgba(0,0,0,0.4)); }
+.icon-glow-amber i     { filter: drop-shadow(0 0 7px rgba(245,158,11,0.9))  drop-shadow(0 2px 2px rgba(0,0,0,0.4)); }
+
+/* Chip lifts slightly on hover for extra life */
+.icon-chip, .icon-glow {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}

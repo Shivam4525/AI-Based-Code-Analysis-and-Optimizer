@@ -1,0 +1,47 @@
+{
+  "env": {
+    "browser": true,
+    "es2022": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:security/recommended-legacy"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "security"
+  ],
+  "rules": {
+    "no-undef": "error",
+    "no-unused-vars": "warn",
+    "no-console": "off",
+    "no-var": "warn",
+    "prefer-const": "warn",
+    "eqeqeq": [
+      "warn",
+      "always"
+    ],
+    "curly": [
+      "warn",
+      "multi-line"
+    ],
+    "no-eval": "error",
+    "no-implied-eval": "error",
+    "no-new-func": "error",
+    "no-await-in-loop": "warn",
+    "no-loop-func": "warn",
+    "no-shadow": "warn",
+    "no-throw-literal": "warn",
+    "no-empty": "warn",
+    "no-redeclare": "error",
+    "security/detect-object-injection": "off"
+  },
+  "globals": {
+    "Chart": "readonly",
+    "Prism": "readonly"
+  }
+}

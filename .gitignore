@@ -1,0 +1,48 @@
+```gitignore
+# Python virtual environments
+.venv/
+.venv_laptop/
+venv/
+backend/venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Node dependencies
+node_modules/
+
+# Secrets and environment files
+.env
+.env.*
+!.env.example
+
+# Generated files
+uploads/*
+reports/*
+fixed_code/*
+
+# Editor and operating system files
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Temporary candidate files
+_ollama_chunked_candidate.py
+_ollama_focused_candidate.py
+```
+
+# Backend virtual environment and Python cache
+backend/venv/
+backend/__pycache__/
+
+# Local debug and backup files
+backend/app.py.bak
+backend/ai_debug_fixed_code.txt
+backend/ollama_debug_last_response.txt
+*.bak
+*.backup
+*.ast_working.bak
+*.bak
+*.backup*
